@@ -1,0 +1,61 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Corretor Ortográfico</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Corretor Ortográfico</h1>
+        <div class="form-group">
+            <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
+        </div>
+        <button onclick="checkText()">Verificar</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+    async function checkText() {
+        const text = document.getElementById('text').value;
+        const response = await fetch('/api/check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({text: text})
+        });
+        
+        const data = await response.json();
+        const resultDiv = document.getElementById('result');
+        
+        if (data.is_correct) {
+            resultDiv.innerHTML = '<p>Parabéns, sua frase está gramaticalmente correta!</p>';
+        } else {
+            resultDiv.innerHTML = `
+                <p>Será que você não quis dizer: ${data.corrected}</p>
+                <p>Correções: ${JSON.stringify(data.changes)}</p>
+            `;
+        }
+    }
+    </script>
+</body>
+</html>
