@@ -32,7 +32,7 @@ projeto/
 1. Clone o repositório ou baixe os arquivos
 2. Instale as dependências:
 ```bash
-pip install flask
+pip install -r requirements.txt
 ```
 
 ## Execução
